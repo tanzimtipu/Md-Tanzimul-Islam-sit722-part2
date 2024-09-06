@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      containers:
+      - name: book-catalog
+        image: week08:1
+        imagePullPolicy: Never
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://week08_tb8x_user:6zUSRlfp86ebrwmDCgpvnxxim8BEl0pR@dpg-crdcr5jqf0us73b0qi0g-a.oregon-postgres.render.com/week08_tb8x"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog
+spec:
+  selector:
+    app: book-catalog
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
